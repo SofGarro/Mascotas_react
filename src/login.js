@@ -1,31 +1,22 @@
 import { useState } from 'react';
-import './Login.css'; // <-- opcional, si prefieres usar archivo separado
+import './Login.css';
+import Mascotas from './mascotas'; // 👈 importamos el feed
 
-function Login(props) {
+function Login() {
   const [email, setEmail] = useState('');
   const [clave, setClave] = useState('');
+  const [logueado, setLogueado] = useState(false); // estado para redirigir
 
-  const manejarSubmit = async (evento) => {
+  const manejarSubmit = (evento) => {
     evento.preventDefault();
-    const datos = { email: email, clave: clave };
-    try {
-      const resp = await fetch('http://localhost:3000/api/usuarios/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-      });
-      const resultado = await resp.json();
-      if (resp.ok) {
-        const tokenRecibido = resultado.token;
-        props.onLoginSuccess(tokenRecibido);
-      } else {
-        alert('Error de credenciales: ' + resultado.error);
-      }
-    } catch (error) {
-      console.error('Error de conexión:', error);
-      alert('Ocurrió un error al conectar con el servidor');
-    }
+    // 🔑 simulamos login exitoso
+    setLogueado(true);
   };
+
+  // Si el usuario "logueó", mostramos Mascotas
+  if (logueado) {
+    return <Mascotas />;
+  }
 
   return (
     <div className="login-contenedor">
